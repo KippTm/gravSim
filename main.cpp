@@ -9,7 +9,7 @@ struct Asteroid {
     float angle;
 };
 
-Asteroid bodies[1];
+Asteroid bodies[1] = {{2.0, 60.0} };
 
 void drawAsteroid(const Asteroid& a) {
     int n = 20;
@@ -52,9 +52,6 @@ void drawAsteroid(const Asteroid& a) {
 void display() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    Asteroid test{2.0, 60.0};
-    bodies[0] = test;
-
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     drawAsteroid(bodies[0]);
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -63,7 +60,7 @@ void display() {
 }
 
 void idle() {
-    bodies[0].angle += 0.2f;
+    bodies[0].angle += 0.02f;
     if (bodies[0].angle > 360.0f) bodies[0].angle -= 360.0f;
     glutPostRedisplay();
 }
