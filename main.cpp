@@ -3,22 +3,34 @@
 //OpenGL libs
 #include <GL/glut.h>
 
+#define NUM_BODIES 4
 
 struct Asteroid {
     double radius;
-    float angle;
+    float weight;
+    float tilt;
+    float speed;
+    float rotation;
+    GLfloat color[3];
 };
 
-Asteroid bodies[1] = {{2.0, 60.0} };
+Asteroid bodies[1] = {{
+    2.0,
+    10.0,
+    90.0,
+    0.01f,
+    0.0f, 
+    {0.8627451f, 0.0784314f, 0.2352941f}
+}};
 
 void drawAsteroid(const Asteroid& a) {
     int n = 20;
     
     glPushMatrix();
-    glRotatef(a.angle, 1.0, 0, 0);
-    glRotatef(a.angle, 0, 1.0, 0);
+    glRotatef(a.tilt, 1.0, 0, 0);
+    glRotatef(a.rotation, 0, 0, 1.0);
     glScalef(a.radius, a.radius, a.radius);
-    glColor3f(220.0f/255.0f, 20.0f/255.0f, 60.0f/255.0f);
+    glColor3f(a.color[0], a.color[1], a.color[2]);
     
     for(int i=0; i<2*n; i++) {
         for(int j=0; j<n; j++) {
@@ -51,17 +63,21 @@ void drawAsteroid(const Asteroid& a) {
 
 void display() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    drawAsteroid(bodies[0]);
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
+    for (int i=0; i<NUM_BODIES; i++) {
+        drawAsteroid(bodies[i]);
+    }
+    
+    //glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     glFlush();
 }
 
 void idle() {
-    bodies[0].angle += 0.02f;
-    if (bodies[0].angle > 360.0f) bodies[0].angle -= 360.0f;
+    for(int i=0; i<NUM_BODIES; i++) {
+        bodies[i].rotation += bodies[i].speed;
+        if (bodies[i].rotation > 360.0f) bodies[i].rotation -= 360.0f;
+    }
     glutPostRedisplay();
 }
 
