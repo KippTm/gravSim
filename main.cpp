@@ -1,21 +1,28 @@
 #include <cmath>
+#include <vector>
 
 //OpenGL libs
 #include <GL/glut.h>
 
 #define NUM_BODIES 4
 
+struct Vec3 {
+    float x, y, z;
+};
+
 struct Asteroid {
     double radius;
-    float weight;
+    float mass;
     float tilt;
     float speed;
     float rotation;
     GLfloat color[3];
+    Vec3 position;
+    Vec3 velocity;
 };
 
 Asteroid bodies[1] = {{
-    2.0,
+    0.4,
     10.0,
     90.0,
     0.01f,
